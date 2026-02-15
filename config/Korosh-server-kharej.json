@@ -1,0 +1,55 @@
+{
+  "services": [
+    {
+      "name": "relay-quic-bind-tunell port",
+      "addr": ": tunnel port ",
+      "admission": "only-b",
+      "handler": {
+        "type": "relay",
+        "auther": "relay-auth",
+        "metadata": {
+          "bind": true
+        }
+      },
+      "listener": {
+        "type": "quic",
+        "tls": {
+          "certFile": "/etc/letsencrypt/live/sub.yourdomain.ir/fullchain.pem",
+          "keyFile": "/etc/letsencrypt/live/sub.yourdomain.ir /privkey.pem"
+        },
+        "metadata": {
+          "alpn": ["h3"],
+          "keepAlive": true,
+          "maxIdleTimeout": "60s"
+        }
+      }
+    }
+  ],
+  "admissions": [
+    {
+      "name": "only-b",
+      "whitelist": true,
+      "matchers": [
+        "Server kharej ip ",
+        "127.0.0.1",
+        "::1"
+      ]
+    }
+  ],
+  "authers": [
+    {
+      "name": "relay-auth",
+      "auths": [
+        {
+          "username": "",
+          "password": ""
+        }
+      ]
+    }
+  ],
+  "log": {
+    "level": "error",
+    "format": "json",
+    "output": "stderr"
+  }
+}
