@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>پنل کاربری</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+body {
+    font-family: Tahoma;
+    padding: 15px;
+    background: #f2f2f2;
+}
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+button {
+    width: 100%;
+    padding: 10px;
+    background: #0088cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h3 id="welcome">در حال ورود...</h3>
+</div>
+
+<div class="card">
+<h3>افزودن سرویس</h3>
+
+نام سرویس:
+<input id="service_name">
+
+نام استفاده‌کننده:
+<input id="customer_name">
+
+شماره تماس:
+<input id="customer_phone">
+
+لینک کانفیگ:
+<input id="config_link">
+
+<button onclick="saveService()">ذخیره</button>
+</div>
+
+<script>
+let tg = window.Telegram.WebApp;
+tg.expand();
+
+let user = tg.initDataUnsafe.user;
+
+document.getElementById("welcome").innerHTML =
+"سلام " + user.first_name;
+
+// اطلاعات Supabase
+const SUPABASE_URL = "https://ykeozvenmmfifvuwtslv.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrZW96dmVubW1maWZ2dXd0c2x2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NzAwMDUsImV4cCI6MjA4NzU0NjAwNX0.JHjV9gyvWKmJaIIkr9HeDp01eH6pQZ06TMMPO7hz6P8eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrZW96dmVubW1maWZ2dXd0c2x2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NzAwMDUsImV4cCI6MjA4NzU0NjAwNX0.JHjV9gyvWKmJaIIkr9HeDp01eH6pQZ06TMMPO7hz6P8";
+
+async function saveService(){
+
+let data = {
+telegram_id: user.id.toString(),
+service_name: document.getElementById("service_name").value,
+customer_name: document.getElementById("customer_name").value,
+customer_phone: document.getElementById("customer_phone").value,
+config_link: document.getElementById("config_link").value
+};
+
+let res = await fetch(SUPABASE_URL + "/rest/v1/services", {
+method: "POST",
+headers: {
+"apikey": SUPABASE_KEY,
+"Authorization": "Bearer " + SUPABASE_KEY,
+"Content-Type": "application/json",
+"Prefer": "return=minimal"
+},
+body: JSON.stringify(data)
+});
+
+if(res.ok){
+alert("✅ ذخیره شد");
+}else{
+alert("❌ خطا در ذخیره");
+}
+}
+</script>
+
+</body>
+</html>
